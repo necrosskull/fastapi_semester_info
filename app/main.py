@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 
 import datetime
@@ -19,13 +19,45 @@ async def docs_redirect():
     return RedirectResponse(url='/docs')
 
 
-@router.get("/week")
+@router.get("/week", tags=["semester"], summary="Возвращает номер текущей недели")
 async def get_week_number():
-    return {"week_number": get_current_week_number()}
+    """
+    Description:
+
+        Возвращает номер текущей недели
+
+    Response:
+
+        - week - номер текущей недели
+
+    Raises:
+
+        - 404 - если семестр еще не начался
+    """
+    current_week = get_current_week_number()
+    if current_week < 0:
+        message = "Семестр еще не начался, до начала семестра осталось недель: " + str(-current_week)
+        raise HTTPException(status_code=404, detail=message)
+
+    return {
+        "week": current_week
+    }
 
 
-@router.get("/semester")
+@router.get("/semester", tags=["semester"], summary="Возвращает информацию о текущем семестре")
 async def get_semester_info():
+    """
+    Description:
+
+        Возвращает информацию о текущем семестре
+
+    Response:
+
+        - semester - номер текущего семестра
+        - start_date - дата начала семестра
+        - year_start - год начала семестра
+        - year_end - год окончания семестра
+    """
     period = get_period(datetime.date.today())
     start_date = get_semester_start_date(period.year_start, period.year_end, period.semester)
 
