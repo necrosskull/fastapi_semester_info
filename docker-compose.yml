@@ -1,0 +1,11 @@
+version: '3'
+services:
+  semester-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - "7373:8000"
+    env_file:
+      - .env
+    restart: unless-stopped
