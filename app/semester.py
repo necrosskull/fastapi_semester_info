@@ -29,7 +29,7 @@ def get_semester_start_date(year_start, year_end, semester):
 
 
 def get_period(date: datetime.date) -> Period:
-    if date.month >= 7:
+    if date.month >= 9:
         return Period(date.year, date.year + 1, 1)
     else:
         return Period(date.year - 1, date.year, 2)
@@ -45,6 +45,12 @@ def get_semester_start_date_from_period():
 def get_current_week_number():
     current_date = datetime.date.today()
     semester_start_date = get_semester_start_date_from_period()
-    week_number = (current_date - semester_start_date).days // 7 + 1
+    if current_date < semester_start_date:
+        return 1
 
-    return week_number
+    week = current_date.isocalendar()[1] - semester_start_date.isocalendar()[1]
+
+    if current_date.isocalendar()[2] != 0:
+        week += 1
+
+    return week
