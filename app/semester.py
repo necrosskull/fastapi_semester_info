@@ -1,15 +1,11 @@
 import datetime
 
-import pytz
-
-pytz.timezone('Europe/Moscow')
-
 
 class Period:
     def __init__(self, year_start, year_end, semester):
-        self.year_start = year_start
-        self.year_end = year_end
-        self.semester = semester
+        self.year_start = int(year_start)
+        self.year_end = int(year_end)
+        self.semester = int(semester)
 
 
 def get_semester_start_date(year_start, year_end, semester):

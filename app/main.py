@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
-
+from app.schemas import Semester, Week
 import datetime
 
 from app.semester import get_current_week_number, get_period, get_semester_start_date
@@ -19,7 +19,7 @@ async def docs_redirect():
     return RedirectResponse(url='/docs')
 
 
-@router.get("/week", tags=["semester"], summary="Возвращает номер текущей недели")
+@router.get("/week", tags=["semester"], summary="Возвращает номер текущей недели", response_model=Week)
 async def get_week_number():
     """
     Description:
@@ -44,7 +44,7 @@ async def get_week_number():
     }
 
 
-@router.get("/semester", tags=["semester"], summary="Возвращает информацию о текущем семестре")
+@router.get("/semester", tags=["semester"], summary="Возвращает информацию о текущем семестре", response_model=Semester)
 async def get_semester_info():
     """
     Description:
